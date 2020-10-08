@@ -1,0 +1,30 @@
+{
+	"parser": "babel-eslint",
+	"env": {
+		"es6": true,
+		"node": true,
+		"browser": true
+	},
+	"parserOptions": {
+		"ecmaFeatures": {
+			"experimentalObjectRestSpread": true,
+			"jsx": true
+		}
+	},
+	"plugins": [
+		"react"
+	],
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"google"
+	],
+	"rules": {
+		"linebreak-style": "off",
+		"no-unused-vars": "off",
+		"no-tabs": "off",
+		"operator-linebreak": "off",
+		"indent": "off",
+		"arrow-parens": "off"
+	}
+}
