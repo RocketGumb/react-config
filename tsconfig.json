@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es5",
+		"sourceMap": true,
+		"jsx": "react",
+		"rootDir": "src",
+		"outDir": "dist",
+		"baseUrl": "./",
+		"removeComments": true,
+		"paths": {
+			"@components/*": [
+				"src/components/*"
+			]
+		}
+	},
+	"exclude": [
+		"node_modules",
+		"dist",
+		"webpack.config.js"
+	]
+}

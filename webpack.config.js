@@ -10,37 +10,27 @@ const isDev = !isProd;
 
 const filename = ext => isDev
 	? `bundle.${ext}`
-	: `bundle.[hash].${ext}`;
+	: `bundle.[hash:8].${ext}`;
 
-const jsLoader = () => {
+const tsLoader = () => {
 	const loaders = [
 		{
-			loader: 'babel-loader',
-			options: {
-				presets: ['@babel/preset-env', '@babel/preset-react'],
-				plugins: ['@babel/plugin-proposal-class-properties'],
-			},
+			loader: 'awesome-typescript-loader',
 		},
 	];
 
 	if (isDev) {
-		loaders.push('eslint-loader');
+		loaders.push({loader: 'eslint-loader'});
 	}
 
 	return loaders;
 };
 
-module.exports = {
-	context: path.resolve(__dirname, 'src'),
+const config = {
 	mode: mode,
-	devtool: isDev ? 'source-map' : false,
-	devServer: {
-		port: '3000',
-		hot: isDev,
-		open: true,
-	},
+	devtool: isDev ? 'inline-source-map' : false,
 	resolve: {
-		extensions: ['.jsx', '.js', '*'],
+		extensions: ['.tsx', '.ts', '.js', '.jsx', '*'],
 		alias: {
 			'@': path.resolve(__dirname, 'src'),
 			'@style': path.resolve(__dirname, 'src/style'),
@@ -48,7 +38,7 @@ module.exports = {
 			'@components': path.resolve(__dirname, 'src/components'),
 		},
 	},
-	entry: './index.jsx',
+	entry: './src/index',
 	output: {
 		filename: filename('js'),
 		path: path.resolve(__dirname, 'dist'),
@@ -56,9 +46,8 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.jsx$/,
-				exclude: /node_modules/,
-				use: jsLoader(),
+				test: /\.ts?x$/,
+				use: tsLoader(),
 			},
 			{
 				test: /\.s[ac]ss$/i,
@@ -79,7 +68,7 @@ module.exports = {
 						options: {
 							postcssOptions: {
 								plugins: [
-									'autoprefixer',
+									autoprefixer,
 								],
 							},
 						},
@@ -94,12 +83,10 @@ module.exports = {
 				},
 			},
 			{
-				test: [/\.jpe?g$/, /\.png$/, /\.svg$/],
-				use: {
-					loader: 'file-loader',
-					options: {
-						name: '[path][name].[ext]',
-					},
+				test: /\.(png|jpe?g|svg)$/,
+				loader: 'file-loader',
+				options: {
+					name: 'media/[name].[hash:8].[ext]',
 				},
 			},
 		],
@@ -107,7 +94,7 @@ module.exports = {
 	plugins: [
 		new CleanWebpackPlugin(),
 		new HTMLWebpackPlugin({
-			template: 'index.html',
+			template: path.resolve(__dirname, 'src/index.html'),
 			minify: {
 				removeComments: isProd,
 				collapseWhitespace: isProd,
@@ -117,4 +104,11 @@ module.exports = {
 			filename: filename('css'),
 		}),
 	],
+};
+
+module.exports = () => {
+	if (isProd) {
+		config.plugins.push(new CleanWebpackPlugin());
+	}
+	return config;
 };
