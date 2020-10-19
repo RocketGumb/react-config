@@ -1,22 +1,24 @@
 {
-	"parser": "babel-eslint",
+	"parser": "@typescript-eslint/parser",
 	"env": {
 		"es6": true,
 		"node": true,
 		"browser": true
 	},
 	"parserOptions": {
+		"sourceType": "module",
 		"ecmaFeatures": {
 			"experimentalObjectRestSpread": true,
 			"jsx": true
 		}
 	},
 	"plugins": [
-		"react"
+		"react", "@typescript-eslint"
 	],
 	"extends": [
 		"eslint:recommended",
 		"plugin:react/recommended",
+		"plugin:@typescript-eslint/recommended",
 		"google"
 	],
 	"rules": {
